@@ -1,5 +1,5 @@
 import numpy as np
-from data_structures import NeuralNetwork
+from dl.data_structures import NeuralNetwork
 
 
 def init_network(layer_dims: list[int]) -> NeuralNetwork:
@@ -9,4 +9,5 @@ def init_network(layer_dims: list[int]) -> NeuralNetwork:
     :param layer_dims: Layer dimensions (first layer being the input layer).
     :return NeuralNetwork: The created network.
     """
+    print(f"[Info]: Creating neural network with layer sizes {layer_dims}")
     return NeuralNetwork(layer_dims)
