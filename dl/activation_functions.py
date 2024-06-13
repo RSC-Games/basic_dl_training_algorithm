@@ -5,7 +5,7 @@ import numpy as np
 from data_structures import ActivationStruct
 
 
-@jit(numba.float32(numba.float32))
+@jit(numba.float32(np.ndarray))
 def sigmoid(Z: np.ndarray) -> ActivationStruct:
     """
     Implements the sigmoid activation function.
