@@ -10,11 +10,19 @@
 import sys
 import numpy as np
 from dl import init_network
+from dl.activation_functions import relu, sigmoid
 
 def main(argv: list) -> int:
-    train_set, test_set, classes = init_network.load_dataset()
+    train_set_orig, test_set_orig, classes = init_network.load_dataset()
+    train_set = init_network.flatten(train_set_orig)
+    test_set = init_network.flatten(test_set_orig)
 
-    network = init_network.init_network([50000, 20, 10, 1])
+    # Model-specific initialization.
+    train_set.div(255.)
+    test_set.div(255.)
+    print(test_set.X.shape)
+
+    network = init_network.init_network([(12288, relu), (20, relu), (10, relu), (1, sigmoid)])
     network.train(train_set)
     return 0
 

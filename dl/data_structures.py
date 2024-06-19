@@ -1,10 +1,15 @@
 import numpy as np
+from typing import Callable
 
 # Dataset representation.
 class DataSet:
     def __init__(self, set_input: np.ndarray, set_output: np.ndarray):
         self.X = set_input
         self.Y = set_output
+
+    def div(self, op: float):
+        self.X = self.X / op
+        self.Y = self.Y / op
 
 
 # Layer output info from the linear forward step.
@@ -34,6 +39,10 @@ class ActivationDerivatives:
         self.db = db
 
 
+class LayerGradients:
+    pass
+
+
 # Contains all of the activation data for the entire network.
 class NetworkActivation:
     def __init__(self, layers: list[ActivationStruct]):
@@ -42,6 +51,7 @@ class NetworkActivation:
 
 # Contains individual layer data.
 class NetworkLayer:
-    def __init__(self, n_nodes: int, n_prev: int):
+    def __init__(self, n_nodes: int, n_prev: int, activation: Callable):
+        self.activation = activation
         self.W = np.random.randn(n_nodes, n_prev) / np.sqrt(n_prev) # or use * 0.01?
         self.b = np.zeros((n_nodes, 1))

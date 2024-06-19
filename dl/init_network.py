@@ -1,10 +1,11 @@
+from typing import Callable
 import numpy as np
 import h5py
 from dl.data_structures import DataSet
 from dl.model import NeuralNetwork
 
 
-def init_network(layer_dims: list[int]) -> NeuralNetwork:
+def init_network(layer_dims: list[tuple[int, Callable]]) -> NeuralNetwork:
     """
     Creates a new neural network with the given layer sizes.
     
@@ -31,3 +32,10 @@ def load_dataset() -> tuple[DataSet, DataSet, np.ndarray]:
     test_set_y_orig = test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))
     
     return DataSet(train_set_x_orig, train_set_y_orig), DataSet(test_set_x_orig, test_set_y_orig), classes
+
+
+def flatten(dataset: DataSet) -> DataSet:
+    return DataSet(
+        dataset.X.reshape(dataset.X.shape[0], -1).T,
+        dataset.Y
+    )
