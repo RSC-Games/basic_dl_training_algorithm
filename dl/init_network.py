@@ -1,6 +1,7 @@
 import numpy as np
 import h5py
-from dl.data_structures import NeuralNetwork, DataSet
+from dl.data_structures import DataSet
+from dl.model import NeuralNetwork
 
 
 def init_network(layer_dims: list[int]) -> NeuralNetwork:

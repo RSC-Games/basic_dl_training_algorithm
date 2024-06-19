@@ -2,10 +2,10 @@ from numba import jit
 import numba
 import numpy as np
 
-from data_structures import ActivationStruct
+from dl.data_structures import ActivationStruct
 
 
-@jit(numba.float32(np.ndarray))
+@jit()
 def sigmoid(Z: np.ndarray) -> ActivationStruct:
     """
     Implements the sigmoid activation function.
@@ -30,7 +30,7 @@ def tanh(Z: np.ndarray) -> ActivationStruct:
     raise NotImplementedError("Unimplemented function 'tanh'!")
 
 
-@jit(numba.float32(numba.float32))
+@jit()
 def relu(Z : np.ndarray) -> ActivationStruct:
     """
     Implements the relu activation function.

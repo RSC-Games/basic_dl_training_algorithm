@@ -15,7 +15,7 @@ def main(argv: list) -> int:
     train_set, test_set, classes = init_network.load_dataset()
 
     network = init_network.init_network([50000, 20, 10, 1])
-    network.train()
+    network.train(train_set)
     return 0
 
 
