@@ -11,14 +11,11 @@ import sys
 import numpy as np
 from dl import init_network
 
-def L_layer_model_exec():
-    parameters, costs = L_layer_model(train_x, train_y, layers_dims, learning_rate=0.005, num_iterations = 1, print_cost = False)
-
-    print("Cost after first iteration: " + str(costs[0]))
-
 def main(argv: list) -> int:
-    #train_x, train_y, layer_dims = load_data()
+    train_set, test_set, classes = init_network.load_dataset()
+
     network = init_network.init_network([50000, 20, 10, 1])
+    network.train()
     return 0
 
 

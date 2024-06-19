@@ -3,8 +3,22 @@ import numpy as np
 from numba import jit
 import numba
 
-from dl.data_structures import NeuralNetwork, NetworkActivation, ActivationStruct
+from dl.data_structures import ActivationStruct, LinearOutput, ActivationDerivatives
 from dl.activation_functions import relu, sigmoid
+
+
+@jit()
+def linear_forward(A: np.ndarray, W: np.ndarray, b: np.ndarray) -> LinearOutput:
+    """
+    Implements linear forward propagation stage.
+    
+    :param A: Last layer's activation data.
+    :param W: Layer weights.
+    :param b: Layer biases
+    :return LinearOutput: Linear output data.
+    """
+    Z = W.dot(A) + b
+    return LinearOutput(Z, A, W, b)
 
 
 @jit()
@@ -19,29 +33,51 @@ def sim_layer(A_prev: np.ndarray, W: np.ndarray, b: np.ndarray, afunc: Callable)
     :return ActivationStruct: The activation data for this layer.
     """
 
-    Z, linear_cache = linear_forward(A_prev, W, b)
-    A, activation_cache = afunc(Z)
+    linear_out = linear_forward(A_prev, W, b)
+    activation_data = afunc(linear_out.Z)
+    return activation_data.add_linear(linear_out)
 
 
 @jit()
-def model_forward(X: np.ndarray, nnet: NeuralNetwork) -> tuple[float, NetworkActivation]:
+def calc_cost(AL: np.ndarray, Y: np.ndarray) -> float:
     """
-    Forward propagation step for a n-level neural network. This network
-    is assumed to use RELU nodes up to the output node, which is sigmoid.
+    Cost calculation for optimization.
+
+    :param AL: Final activation vector.
+    :param Y: Actual result.
+    :return cost: Calculated cost of the operation.
+    """
+
+    m = Y.shape[1]
+
+    recip_m = (1. / m)
+    c1 = -1 * np.dot(Y, np.log(AL.T))
+    c2 = np.dot(1 - Y, np.log((1 - AL).T))
+    c3 = recip_m * (c1 - c2)
+
+    cost = np.squeeze(c3)
+    return cost
+
+
+@jit()
+def linear_backward(dZ: np.ndarray, activation_cache: ActivationStruct) -> ActivationDerivatives:
+    """
+    Linear back propagation. Figure out how to optimize this branch.
     
-    :param X: Input layer
-    :param nnet: Network layer weights and biases.
-    :returns list: Returns a list of the output activation value and the
-        cached activation values.
+    :param dZ: The derivative of the output.
+    :param activation_cache: Tuple of activation data.
+    :return ActivationDerivatives: Derivative output data.
     """
 
-    caches = []
-    A = X
-    L = nnet.get_layer_count()
+    lcache = activation_cache.linear_cache
+    A_prev = lcache.cache_A
+    W = lcache.cache_W
+    b = lcache.cache_b
+    m = A_prev.shape[1]
 
-    for layer in range(1, L):
-        A_prev = A
-        current_layer = nnet.get_layer(layer)
-        activation = sim_layer(A_prev, current_layer.W, current_layer.b, relu)
-        A = activation.A
-        caches.append(activation)
+    recip_m = 1. / m
+    dW = recip_m * np.dot(dZ, A_prev.T)
+    db = recip_m * np.sum(dZ, axis=1, keepdims=True)
+    dA_prev = np.dot(W.T, dZ)
+
+    return ActivationDerivatives(dA_prev, dW, db)
