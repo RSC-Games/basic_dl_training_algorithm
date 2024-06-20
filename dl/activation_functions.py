@@ -5,7 +5,7 @@ import numpy as np
 from dl.data_structures import ActivationStruct
 
 
-@jit(forceobj=True)
+#@jit(forceobj=True)
 def sigmoid(Z: np.ndarray) -> ActivationStruct:
     """
     Implements the sigmoid activation function.
@@ -30,7 +30,7 @@ def tanh(Z: np.ndarray) -> ActivationStruct:
     raise NotImplementedError("Unimplemented function 'tanh'!")
 
 
-@jit(forceobj=True)
+#@jit(forceobj=True)
 def relu(Z : np.ndarray) -> ActivationStruct:
     """
     Implements the relu activation function.
