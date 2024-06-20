@@ -61,7 +61,7 @@ class NeuralNetwork:
         return p
 
 
-    @jit(forceobj=True)
+    #@jit(forceobj=True)
     def train(self, set: DataSet, learning_rate=0.0075, num_iterations=2500, log=False):
         """
         Train a L-layer neural network.
@@ -92,7 +92,7 @@ class NeuralNetwork:
 
         print(f"[Info]: Finished training model with final cost {cost}.")
     
-    #@jit(forceobj=True)
+    ##@jit(forceobj=True)
     def model_forward(self, X: np.ndarray) -> np.ndarray:
         """
         Forward propagation step for a n-level neural network. This network
@@ -121,7 +121,7 @@ class NeuralNetwork:
         return A
     
 
-    #@jit()
+    ##@jit()
     def model_backward(self, AL: np.ndarray, Y: np.ndarray) -> list[ActivationDerivatives]:
         """
         Backward propagation step for optimizing costs.
@@ -165,7 +165,7 @@ class NeuralNetwork:
 
 
 
-#@jit(forceobj=True)
+##@jit(forceobj=True)
 def linear_forward(A: np.ndarray, W: np.ndarray, b: np.ndarray) -> LinearOutput:
     """
     Implements linear forward propagation stage.
@@ -179,7 +179,7 @@ def linear_forward(A: np.ndarray, W: np.ndarray, b: np.ndarray) -> LinearOutput:
     return LinearOutput(Z, A, W, b)
 
 
-#@jit(forceobj=True)
+##@jit(forceobj=True)
 def sim_layer(A_prev: np.ndarray, W: np.ndarray, b: np.ndarray, afunc: Callable) -> ActivationStruct:
     """
     Implements the essential forward propagation step.
@@ -197,7 +197,7 @@ def sim_layer(A_prev: np.ndarray, W: np.ndarray, b: np.ndarray, afunc: Callable)
     return activation_data
 
 
-@jit(forceobj=True)
+#@jit(forceobj=True)
 def calc_cost(AL: np.ndarray, Y: np.ndarray) -> float:
     """
     Cost calculation for optimization.
@@ -218,7 +218,7 @@ def calc_cost(AL: np.ndarray, Y: np.ndarray) -> float:
     return cost
 
 
-#@jit()
+##@jit()
 def linear_backward(dZ: np.ndarray, activation_cache: ActivationStruct) -> ActivationDerivatives:
     """
     Linear back propagation. Figure out how to optimize this branch.

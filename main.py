@@ -11,20 +11,20 @@ import sys
 import time
 import numpy as np
 from dl import init_network
-from dl.model import NeuralNetwork
+from dl.model import NeuralNetwork     
 from dl.data_structures import DataSet
 from dl.activation_functions import relu, sigmoid
 
 def main(argv: list) -> int:
-    train_set_orig, test_set_orig, classes = init_network.load_dataset()
+    train_set_orig, test_set_orig, = init_network.load_dataset()
     train_set = init_network.flatten(train_set_orig)
     test_set = init_network.flatten(test_set_orig)
 
     # Model-specific initialization.
     train_set.div(255.)
     test_set.div(255.)
-
-    network = init_network.init_network([(12288, relu), (20, relu), (10, relu), (1, sigmoid)])
+    network = init_network.init_network([(49152, relu), (50, relu), (10, relu), (1, sigmoid)])
+    
     train_network_timed(network, train_set)
 
     print(f"[Info]: Testing train set fit.")
@@ -37,7 +37,7 @@ def main(argv: list) -> int:
 
 def train_network_timed(network: NeuralNetwork, train_set: DataSet):
     before = time.time()
-    network.train(train_set, num_iterations=2500, log=True)
+    network.train(train_set, num_iterations=8000, log=True)
     after = time.time()
 
     print(f"[Info]: Model took {after - before}s to train.")
