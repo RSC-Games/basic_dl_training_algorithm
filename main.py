@@ -1,13 +1,10 @@
 #######################################################################################
-#                       Semi-optimized Deep Learning algorithm                        #
+#                         Optimized Deep Learning algorithm                           #
 #                                                                                     #
 #    This algorithm is built, with CUDA and numba, to accelerate learning on small    #
 # networks such that their training can be completed in a reasonable amount of time.  #
 # This is the test file where we train the algorithm so it is capable of doing what   #
 # we want (recognize cats).                                                           #
-#    The algorithm itself was built mainly to help me understand how a DL network     #
-# actually functions beneath the surface. So while it's not super optimized, it       #
-# works.                                                                              #
 #                                                                                     #
 #######################################################################################
 import sys
@@ -40,7 +37,7 @@ def main(argv: list) -> int:
 
 def train_network_timed(network: NeuralNetwork, train_set: DataSet):
     before = time.time()
-    network.train(train_set, num_iterations=8000, log=True)
+    network.train(train_set, num_iterations=5000, log=True)
     after = time.time()
 
     print(f"[Info]: Model took {after - before}s to train.")

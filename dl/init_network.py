@@ -19,10 +19,10 @@ def init_network(layer_dims: list[tuple[int, Callable]]) -> NeuralNetwork:
 
 def load_dataset() -> tuple[DataSet, DataSet]:
     print("[Warn]: Data loading is fixed function and inflexible!")
-    train_set_x_orig = load_images("train") #not thing for test set
-    train_set_y_orig = setType("train") # thing for test set
-    test_set_x_orig =load_images("test") # not thing for test set
-    test_set_y_orig = setType("test") # thing for test set
+    train_set_x_orig = load_images("train") 
+    train_set_y_orig = setType("train") 
+    test_set_x_orig =load_images("test") 
+    test_set_y_orig = setType("test") 
     return DataSet(train_set_x_orig, train_set_y_orig), DataSet(test_set_x_orig, test_set_y_orig) # type: ignore
 
 def setType(type):
