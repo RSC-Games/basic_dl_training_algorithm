@@ -8,8 +8,11 @@
 #                                                                                     #
 #######################################################################################
 import sys
+import time
 import numpy as np
 from dl import init_network
+from dl.model import NeuralNetwork
+from dl.data_structures import DataSet
 from dl.activation_functions import relu, sigmoid
 
 def main(argv: list) -> int:
@@ -20,11 +23,24 @@ def main(argv: list) -> int:
     # Model-specific initialization.
     train_set.div(255.)
     test_set.div(255.)
-    print(test_set.X.shape)
 
     network = init_network.init_network([(12288, relu), (20, relu), (10, relu), (1, sigmoid)])
-    network.train(train_set)
+    train_network_timed(network, train_set)
+
+    print(f"[Info]: Testing train set fit.")
+    p_hat = network.predict(train_set)
+
+    print(f"[Info]: Testing test set fit.")
+    p_hat = network.predict(test_set)
     return 0
+
+
+def train_network_timed(network: NeuralNetwork, train_set: DataSet):
+    before = time.time()
+    network.train(train_set, num_iterations=2500, log=True)
+    after = time.time()
+
+    print(f"[Info]: Model took {after - before}s to train.")
 
 
 if __name__ == "__main__":

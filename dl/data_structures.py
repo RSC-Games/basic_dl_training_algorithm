@@ -9,7 +9,6 @@ class DataSet:
 
     def div(self, op: float):
         self.X = self.X / op
-        self.Y = self.Y / op
 
 
 # Layer output info from the linear forward step.
@@ -39,10 +38,6 @@ class ActivationDerivatives:
         self.db = db
 
 
-class LayerGradients:
-    pass
-
-
 # Contains all of the activation data for the entire network.
 class NetworkActivation:
     def __init__(self, layers: list[ActivationStruct]):
@@ -54,4 +49,8 @@ class NetworkLayer:
     def __init__(self, n_nodes: int, n_prev: int, activation: Callable):
         self.activation = activation
         self.W = np.random.randn(n_nodes, n_prev) / np.sqrt(n_prev) # or use * 0.01?
-        self.b = np.zeros((n_nodes, 1))
+        self.b = np.zeros((n_nodes, 1), dtype=float)
+
+    def update(self, cache: ActivationDerivatives, learning_rate: float):
+        self.W = self.W - learning_rate * cache.dW
+        self.b = self.b - learning_rate * cache.db
